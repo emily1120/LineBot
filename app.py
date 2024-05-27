@@ -69,11 +69,12 @@ words_dict = {
 }
 
 # 使用者輸入心理相關問題
-Q = input("請輸入心理相關問題：")
-if Q == 'quit':
-    break
-A=words_dict[Q]
-print("答案:",A )
+    Q = input("請輸入心理相關問題：")
+    if Q == 'quit':
+        break
+    A=words_dict[Q]
+    print("答案:",A )
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(A))
 
 @handler.add(PostbackEvent)
 def handle_message(event):
