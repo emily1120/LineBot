@@ -53,7 +53,8 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     msg = event.message.text
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(msg)+Q)
+    ans = msg + Q
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(ans))
 
 # 定義字典
 words_dict = {
