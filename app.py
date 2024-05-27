@@ -52,9 +52,9 @@ def callback():
 # 處理訊息
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    Q = event.message.text
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(A))
-
+    msg = event.message.text
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(msg))
+    
 # 定義字典
 words_dict = {
     "你今天來這裡的原因是什麼？": "我感到工作和個人責任讓我不堪重負。",
