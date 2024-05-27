@@ -64,8 +64,8 @@ words_dict = {
 
 def handle_message(event):
     msg = event.message.text
-    if msg == "ans":
-        hello_msg = "ans" + random.choice(["！", "～", "。"])
+    if msg == "你好":
+        hello_msg = "你好" + random.choice(["！", "～", "。"])
         reply_msg = hello_msg + "請輸入心理相關問題："
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
     else:
