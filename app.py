@@ -62,6 +62,7 @@ words_dict = {
     "你對這次心理輔導有什麼目標？": "我希望學會更好地管理壓力，並提高我的整體幸福感。"
 }
 
+@handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     msg = event.message.text
     if True:  # 無條件成立
