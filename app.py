@@ -50,15 +50,6 @@ def callback():
 
 
 # 處理訊息
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    Q = input("請輸入心理相關問題：")
-    if Q == 'quit':
-        break
-    A=words_dict[Q]
-    print("答案:",A )
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(A))
-# 定義字典
 words_dict = {
     "你今天來這裡的原因是什麼？": "我感到工作和個人責任讓我不堪重負。",
     "你最近的感覺如何？": "我大多數時候感到焦慮和壓力很大。",
@@ -71,6 +62,18 @@ words_dict = {
     "你對這次心理輔導有什麼目標？": "我希望學會更好地管理壓力，並提高我的整體幸福感。"
 }
 
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    msg = event.message.text
+    if msg == "請輸入心理相關問題：":
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=msg))
+    else:
+        if msg in words_dict:
+            ans = words_dict[msg]
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=ans))
+        else:
+            error_msg = "抱歉，我暫時無法回答你的問題。"
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=error_msg))
 
 @handler.add(PostbackEvent)
 def handle_message(event):
