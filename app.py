@@ -62,11 +62,12 @@ words_dict = {
     "你對這次心理輔導有什麼目標？": "我希望學會更好地管理壓力，並提高我的整體幸福感。"
 }
 
-@handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     msg = event.message.text
-    if msg == "請輸入心理相關問題：":
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=msg))
+    if msg == "ans":
+        hello_msg = "ans" + random.choice(["！", "～", "。"])
+        reply_msg = hello_msg + "請輸入心理相關問題："
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
     else:
         if msg in words_dict:
             ans = words_dict[msg]
