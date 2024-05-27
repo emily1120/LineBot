@@ -52,10 +52,6 @@ def callback():
 # 處理訊息
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    Q = event.message.text
-    A = "you said"+Q
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(A))
-    
 # 定義字典
 words_dict = {
     "你今天來這裡的原因是什麼？": "我感到工作和個人責任讓我不堪重負。",
@@ -75,7 +71,7 @@ if Q == 'quit':
     break
 A=words_dict[Q]
 print("答案:",A )
-
+line_bot_api.reply_message(event.reply_token, TextSendMessage(A))
 
 @handler.add(PostbackEvent)
 def handle_message(event):
