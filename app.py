@@ -61,6 +61,9 @@ words_dict = {
     "你對這次心理輔導有什麼目標？": "我希望學會更好地管理壓力，並提高我的整體幸福感。"
 }
 
+# 設置一個全局變量來跟踪狀態
+user_state = {}
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     user_id = event.source.user_id
@@ -70,9 +73,11 @@ def handle_message(event):
     if msg == "結束":
         reply_msg = "聊天已結束。"
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
+        if user_id in user_state:
+            del user_state[user_id]
         return
 
-    # 如果使用者狀態不存在，回應 "請輸入心理相關問題："
+    # 如果使用者狀態不存在或為新狀態，回應 "請輸入心理相關問題："
     if user_id not in user_state or user_state[user_id] == "new":
         reply_msg = f"你剛才說的是：'{msg}'。請輸入心理相關問題："
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
@@ -86,11 +91,8 @@ def handle_message(event):
             error_msg = "抱歉，我暫時無法回答你的問題。"
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=error_msg))
 
-        # 重置狀態為新狀態以便重新開始聊天
-        user_state[user_id] = "new"
-
-# 設置全局變量來跟踪狀態
-user_state = {}
+    # 繼續維持狀態為已詢問
+    user_state[user_id] = "asked"
 
 @handler.add(PostbackEvent)
 def handle_message(event):
