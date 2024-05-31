@@ -61,36 +61,39 @@ words_dict = {
     "你對這次心理輔導有什麼目標？": "我希望學會更好地管理壓力，並提高我的整體幸福感。"
 }
 
-# 設置一個全局變量來跟踪狀態
-user_state = {}
-
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     user_id = event.source.user_id
     msg = event.message.text
-    
-    # 如果收到 "結束"，清除狀態並回覆結束訊息
+
+    # 如果收到 "結束"，回覆結束訊息並返回
     if msg == "結束":
-        if user_id in user_state:
-            del user_state[user_id]
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="聊天已結束。"))
+        reply_msg = "聊天已結束。"
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
         return
 
-    # 如果使用者狀態不存在，回應 "請輸入心理相關問題："
-    if user_id not in user_state:
-        reply_msg = f"你剛才說的是：'{msg}'。請輸入心理相關問題："
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
-        user_state[user_id] = "asked"  # 更新狀態為已詢問
-    else:
+    # 首先回覆使用者的訊息並詢問 "請輸入心理相關問題："
+    initial_reply = f"你剛才說的是：'{msg}'。請輸入心理相關問題："
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=initial_reply))
+
+    # 準備回應後續訊息
+    @handler.add(MessageEvent, message=TextMessage)
+    def handle_followup(event):
+        followup_msg = event.message.text
+
+        # 如果收到 "結束"，回覆結束訊息並返回
+        if followup_msg == "結束":
+            reply_msg = "聊天已結束。"
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
+            return
+
         # 如果訊息在字典中，回應對應答案
-        if msg in words_dict:
-            ans = words_dict[msg]
+        if followup_msg in words_dict:
+            ans = words_dict[followup_msg]
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=ans))
         else:
             error_msg = "抱歉，我暫時無法回答你的問題。"
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=error_msg))
-        # 清除狀態以便於下一次詢問
-        del user_state[user_id]
 
 @handler.add(PostbackEvent)
 def handle_message(event):
