@@ -72,7 +72,7 @@ def handle_message(event):
 
     # 如果收到 "結束"，回覆結束訊息並重置狀態
     if msg == "結束":
-        reply_msg = "聊天已結束。"
+        reply_msg = "聊天已結束，祝福您擁有快樂的每一天"
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
         if user_id in user_state:
             del user_state[user_id]
