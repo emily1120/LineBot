@@ -72,7 +72,7 @@ def handle_message(event):
 
     # 如果收到 "結束"，回覆結束訊息並重置狀態
     if msg == "結束":
-        reply_msg = "聊天已結束，祝福您擁有快樂的每一天"
+        reply_msg = "聊天已結束，祝福您擁有快樂的一天"
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
         if user_id in user_state:
             del user_state[user_id]
@@ -80,7 +80,7 @@ def handle_message(event):
 
     # 如果使用者狀態不存在或為新狀態，回應 "請輸入心理相關問題："
     if user_id not in user_state or user_state[user_id] == "new":
-        reply_msg = f"'{msg}'，請輸入心理相關問題："
+        reply_msg = f"{msg}，請輸入心理相關問題："
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
         user_state[user_id] = "asked"  # 更新狀態為已詢問
     else:
@@ -89,7 +89,7 @@ def handle_message(event):
             ans = words_dict[msg]
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=ans))
         else:
-            error_msg = "抱歉，我暫時無法回答你的問題，請再次輸入問題："
+            error_msg = "抱歉，我暫時無法回答你的問題。請再次輸入問題："
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=error_msg))
 
     # 繼續維持狀態為已詢問
