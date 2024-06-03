@@ -80,7 +80,7 @@ def handle_message(event):
 
     # 如果使用者狀態不存在或為新狀態，回應 "請輸入心理相關問題："
     if user_id not in user_state or user_state[user_id] == "new":
-        reply_msg = f"你剛才說的是：'{msg}'。請輸入心理相關問題："
+        reply_msg = f"'{msg}'，請輸入心理相關問題："
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
         user_state[user_id] = "asked"  # 更新狀態為已詢問
     else:
@@ -89,7 +89,7 @@ def handle_message(event):
             ans = words_dict[msg]
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=ans))
         else:
-            error_msg = "抱歉，我暫時無法回答你的問題。"
+            error_msg = "抱歉，我暫時無法回答你的問題，請再次輸入問題："
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=error_msg))
 
     # 繼續維持狀態為已詢問
